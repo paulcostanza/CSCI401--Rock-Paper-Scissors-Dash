@@ -30,7 +30,6 @@ app.use(cookieParser())
 // app.options('*', cors())
 
 
-
 connectionToDatabase()
 
 // use and add the router to the middleware handling path
