@@ -25,6 +25,7 @@ export default function About() {
                     <p>Joanna was in charge of designing the levels and successfully created 25 of them, frequently seeking Paul's input. She also worked on the timer and score system, though she ran into major issues with the scoring—Paul stepped in to help resolve them. Joanna also created the HTML pages for the <strong>How to Play</strong> and <strong>About Us</strong> sections. She initially assisted with the tunnel system, which was later replaced by a more advanced function written by Pierce.</p>
 
                     <p>Paul handled the database, pellet system, collision detection, login functionality, main menu, scoring system, and CI/CD pipeline.</p>
+                    <p>Pierce designed the sprites,  and implementation of animation of tunnel mechanics, general mechanics and fixing, implementation of character select screen</p>
 
                     <p>We are incredibly grateful for the opportunity to work on this project, and we're excited for others to experience and enjoy our game.</p>
                 </section>
