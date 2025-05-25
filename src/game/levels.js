@@ -25,6 +25,8 @@ import { getSelectedCharacter } from './selectedCharacter.js'
 // events
 import { lastKeyPressed, currentlyPressedKeys, mobileControls } from './eventListeners.js'
 
+let animationId // will reset level, once all pellets have been collected
+
 function runCanvas(level, gameOver, setPoints) {
   const canvas = document.getElementById("myCanvas");
   const ctx = canvas.getContext("2d");  /// Store the 2D rendering context
@@ -37,9 +39,9 @@ function runCanvas(level, gameOver, setPoints) {
   let border = []
   let pellets = []
   let powerUps = []
-  let tunnel1 = []
-  let tunnel2 = []
-  let tunnel3 = []
+  // let tunnel1 = []
+  // let tunnel2 = []
+  // let tunnel3 = []
   mobileControls()
   let selected = getSelectedCharacter()
 
@@ -100,6 +102,9 @@ function runCanvas(level, gameOver, setPoints) {
     },
     imageSrc: imageSrc
   }, ctx)
+
+  // for tunnel check
+  const allCharacters = [scissors, rock, paper]
 
   const gameScore = new Score(setPoints)
 
@@ -171,26 +176,48 @@ function runCanvas(level, gameOver, setPoints) {
 
   function animate() {
 
-    requestAnimationFrame(animate)
+    animationId = requestAnimationFrame(animate)
     ctx.clearRect(0, 0, canvas.width, canvas.height)
-    // if (tunnel1.length > 0) {
-    //   checkCharacterLocation(paper, tunnel1);
-    //   checkCharacterLocation(rock, tunnel1);
-    //   checkCharacterLocation(scissors, tunnel1);
-    // }
 
-    // if (tunnel2.length > 0) {
-    //   checkCharacterLocation(paper, tunnel2);
-    //   checkCharacterLocation(rock, tunnel2);
-    //   checkCharacterLocation(scissors, tunnel2);
-    // }
+    function tunnel(level) {
+      console.log(`(x, y): ${paper.position.x}, ${paper.position.y}`)
 
-    // if (tunnel3.length > 0) {
-    //   checkCharacterLocation(paper, tunnel3);
-    //   checkCharacterLocation(rock, tunnel3);
-    //   checkCharacterLocation(scissors, tunnel3);
-    // }
-    // makes character move depending on the key that is pressed
+      allCharacters.forEach(char => {
+        if (level === 0) {
+
+          // top to bottom 
+          if (char.position.y < 0 && char.position.x > 534 && char.position.x < 554) {
+            char.position.x = 62.5
+            char.position.y = 600
+          }
+
+          // bottom to top
+          if (char.position.y > 600 && char.position.x > 57 && char.position.x < 70) {
+            char.position.x = 543
+            char.position.y = 0
+          }
+        }
+
+        if (level === 1) {
+
+          // top to bottom
+          if (char.position.y < 0 && char.position.x > 218 && char.position.x < 238) {
+            char.position.x = 298.5
+            char.position.y = 600
+          }
+
+          // bottom to top
+          if (char.position.y > 600 && char.position.x > 298 && char.position.x < 310) {
+            char.position.x = 218.5
+            char.position.y = 0
+          }
+        }
+      })
+
+    }
+
+    tunnel(level)
+
     if (currentlyPressedKeys.w.pressed && lastKeyPressed === 'w' ||
       currentlyPressedKeys.ArrowUp.pressed && lastKeyPressed === 'ArrowUp'
     ) {
@@ -273,6 +300,23 @@ function runCanvas(level, gameOver, setPoints) {
 
       // triggers next level if you collect all the pellets
       if (pellets.length === 0) {
+
+        paper.position.x = -100
+        paper.position.y = 0
+        rock.position.x = -100
+        rock.position.y = 100
+        scissors.position.x = -100
+        scissors.position.y = 200
+
+        paper.velocity.x = -1
+        paper.velocity.y = 0
+        rock.velocity.x = -1
+        rock.velocity.y = 0
+        scissors.velocity.x = -1
+        scissors.velocity.y = 0
+
+
+
         console.log('no more pellets!')
         runCanvas(level + 1, gameOver, gameScore.getPoints())
       }
@@ -438,38 +482,34 @@ function runCanvas(level, gameOver, setPoints) {
       }
 
       // collision with user
-      if (Math.hypot(paper.position.x - dude.position.x, paper.position.y - dude.position.y) < 20) {
+      if (Math.hypot(paper.position.x - dude.position.x, paper.position.y - dude.position.y) < 10) {
 
         if (typeof gameOver === 'function') {
 
           paper.velocity.x = 0
           paper.velocity.y = 0
-          paper.position.x = 62.5
-          paper.position.y = 62.5
+          paper.position.x = -62.5
+          paper.position.y = -62.5
 
-          let endOfGameScore = gameScore.getPoints
+          let endOfGameScore = gameScore.getPoints()
           gameScore.reset()
 
           gameOver(endOfGameScore)
 
-
-
           // need to reset score = 0. Maybe turn score file into a class with a reset() function?
         }
-
-
-
-
-        // dude.position.x = 600
-        // dude.position.y = 600
-
-        // youDied('../death-screen')
 
       }
       dude.move()
     })
   }
+
+  if (animationId) {
+    cancelAnimationFrame(animationId)
+  }
   animate()
 }
+
+
 
 export default runCanvas

@@ -13,12 +13,12 @@ class Character {
         this.tunnelCooldown = false;
         this.prevCollisions = [] // for badguy's AI
 
-        setInterval(() => {
-            if (this.velocity.x != 0 || this.velocity.y != 0) {
-                this.frameindex = (this.frameindex + 1) % this.imageSrc.length
-                this.image.src = this.imageSrc[this.frameindex]
-            }
-        }, 250)
+        // setInterval(() => {
+        //     if (this.velocity.x != 0 || this.velocity.y != 0) {
+        //         this.frameindex = (this.frameindex + 1) % this.imageSrc.length
+        //         this.image.src = this.imageSrc[this.frameindex]
+        //     }
+        // }, 250)
     }
 
     draw() {
@@ -55,6 +55,7 @@ class Character {
                 this.state = 'death'
         }
     }
+
 }
 
 export default Character

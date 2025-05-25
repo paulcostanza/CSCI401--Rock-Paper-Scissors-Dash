@@ -8,6 +8,10 @@ import crypto from 'crypto'
 
 export const signup = async (req, res) => {
     const { username, email, password } = req.body
+
+    console.log(`username: ${username}`)
+    console.log(`email: ${email}`)
+    console.log(`password: ${password}`)
     try {
         if (!username || !email || !password) {
             return res.status(400).json({ message: "All inputs are required!!" })
